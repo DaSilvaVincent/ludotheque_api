@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Achat extends Model
 {
+    protected $table = 'Achat';
     use HasFactory;
     public $timestamps = false;
 

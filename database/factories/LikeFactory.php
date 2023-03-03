@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Jeu;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,11 +18,11 @@ class LikeFactory extends Factory
      */
     public function definition(): array
     {
-        $jeu = Jeu::all();
-        $user = User::all();
+        $jeu = Jeu::all()->pluck('id');
+        $user = User::all()->pluck('id');
         return [
-                'user_id' => $user->id,
-                'jeu_id' => $jeu ->id
+                'user_id' => $this->faker->randomElement($user),
+                'jeu_id' => $this->faker->randomElement($jeu)
         ];
     }
 }

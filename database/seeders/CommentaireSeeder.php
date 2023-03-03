@@ -18,28 +18,28 @@ class CommentaireSeeder extends Seeder
             'user_id' => 1,
             'jeu_id' => 1,
             'commentaire' => "Le jeu est sympa mais sans plus",
-            'date' => Carbon::parse('2022-05-08'),
+            'date_com' => Carbon::parse('2022-05-08'),
             'note' => 3,
         ]);
         Commentaire::factory()->create([
             'user_id' => 2,
             'jeu_id' => 1,
             'commentaire' => "Le meilleur jeu en famille",
-            'date' => Carbon::parse('2023-02-02'),
+            'date_com' => Carbon::parse('2023-02-02'),
             'note' => 4,
         ]);
         Commentaire::factory()->create([
             'user_id' => 3,
             'jeu_id' => 2,
             'commentaire' => "Gardez votre argents",
-            'date' => Carbon::parse('2022-09-10'),
+            'date_com' => Carbon::parse('2022-09-10'),
             'note' => 0,
         ]);
         Commentaire::factory()->create([
             'user_id' => 5,
             'jeu_id' => 4,
             'commentaire' => "Parfait",
-            'date' => Carbon::parse('2022-12-03'),
+            'date_com' => Carbon::parse('2022-12-03'),
             'note' => 5,
         ]);
     }

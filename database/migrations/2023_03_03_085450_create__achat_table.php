@@ -17,9 +17,9 @@ return new class extends Migration
             $table->dateTime('date_achat');
             $table->integer('prix');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('User')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('jeu_id');
-            $table->foreign('jeu_id')->references('id')->on('Jeu')->onDelete('cascade');
+            $table->foreign('jeu_id')->references('id')->on('jeu')->onDelete('cascade');
             $table->timestamps();
         });
     }
