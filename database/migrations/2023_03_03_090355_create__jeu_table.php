@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('description');
             $table->string('langue');
-            $table->string('url_media');
+            $table->string('url_media')->default('images/no_image.png');
             $table->integer('age_min');
             $table->integer('nombre_joueurs_min');
             $table->integer('nombre_joueurs_max');

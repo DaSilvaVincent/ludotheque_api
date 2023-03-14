@@ -26,14 +26,13 @@ class JeuFactory extends Factory
         $editeur_id = Editeur::all()->pluck('id');
         return [
             'id' => self::$i++,
-            'nom' => $this->faker->randomElement($array = array('test','test2','test3')),
-            'description' => $this->faker->randomElement($array),
-            'langue' => $this->faker->randomElement($array),
-            'url_media' => $this->faker->randomElement($array),
+            'nom' => $this->faker->randomElement($array = array('UNO','Rubik\'s Cube','Jeu de dame','Poker','Bataille','Scrabble')),
+            'description' => $this->faker->randomElement($array = array('Il faut se débarasser de toutes ses cartes','Il faut que toutes les faces soient de la même couleur','Il faut prendre les pions de l\'adversaire','Il faut prendre les cartes de l\'adversaire','Il faut faire le plus de points en formant des mots avec les lettres données')),
+            'langue' => $this->faker->randomElement($array = array('Français','Anglais')),
             'age_min' => $this->faker->randomDigit(),
             'nombre_joueurs_min' => $this->faker->randomDigit(),
             'nombre_joueurs_max' => $this->faker->randomDigit(),
-            'duree_partie' => $this->faker->randomElement($array),
+            'duree_partie' => $this->faker->randomElement($array = array('10min','30min','1h','1h30','2h','2h30','3h')),
             'valide' => $this->faker->boolean,
             'categorie_id' => $this->faker->randomElement($categorie_id),
             'theme_id' => $this->faker->randomElement($theme_id),
