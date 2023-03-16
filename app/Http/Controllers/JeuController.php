@@ -6,18 +6,21 @@ use App\Http\Requests\JeuRequest;
 use App\Http\Resources\JeuRessource;
 use App\Models\Jeu;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class JeuController extends Controller
 {
-    public function index(Request $request = null) {
+    public function index($age_min = null) {
         $jeux = Jeu::all();
-        if(!empty($request)) {
+        $jeuTrie = new Collection();
+        if(!empty($age_min)) {
             foreach ($jeux as $jeu) {
-                if ($request->age_min < $jeu->age_min) {
-                    $jeux->forget($jeu);
+                if ($age_min < $jeu->age_min) {
+                    $jeuTrie->add($jeu);
                 }
             }
+            return JeuRessource::collection($jeuTrie);
         }
         return JeuRessource::collection($jeux);
     }
