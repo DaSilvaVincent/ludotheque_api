@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdherentRequest;
+use App\Http\Resources\AdhrentResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -93,5 +94,17 @@ class AdherentControlleur extends Controller
         ]);
     }
 
-
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function demandeProfil(int $id) : bool
+    {
+        $adherent = User::findOrFail($id);
+        return  new AdhrentResource($adherent) && response()->json([
+            'status'=> true,
+            'message' => "Profil utilisateur successfully!",
+            'salle' => $adherent
+        ],200);
+    }
 }
