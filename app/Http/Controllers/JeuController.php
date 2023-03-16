@@ -44,4 +44,14 @@ class JeuController extends Controller
             return response()->json(['message' => $e],422);
         }
     }
+
+    public function update(JeuRequest $request, $id) {
+        try {
+            $jeu = Jeu::findOrFail($id);
+            $jeu->update($request->all());
+            return response()->json(['status' => "success", 'message' => "Game updated successfully!", 'jeu' => $jeu], 200);
+	} catch (Exception $e) {
+            return response()->json(['message' => $e],422);
+        }
+    }
 }
