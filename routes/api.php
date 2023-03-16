@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdherentControlleur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,3 +23,4 @@ Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(f
     Route::post('register', 'register');
     Route::post('logout', 'logout');
 });
+Route::get('/adherent/{id}', [AdherentControlleur::class, 'show']);
