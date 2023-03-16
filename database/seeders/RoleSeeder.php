@@ -17,6 +17,12 @@ class RoleSeeder extends Seeder
             'nom' => "admin",
         ]);
         Role::factory()->create([
+            'nom' => "adhérent-premium",
+        ]);
+        Role::factory()->create([
+            'nom' => "adhérent",
+        ]);
+        Role::factory()->create([
             'nom' => "visiteur",
         ]);
     }
