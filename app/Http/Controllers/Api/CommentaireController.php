@@ -47,4 +47,37 @@ class CommentaireController extends Controller
             ], 200
         );
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param CommentaireRequest $request
+     * @param  int  $id
+     * @return JsonResponse
+     */
+    public function edit(CommentaireRequest $request, int $id){
+        $request->validate([
+            'commentaire' => "required",
+            'date_com' => "required",
+            'note' => "required",
+            'jeu_id' => "required",
+            'adherent_id' => "required",
+        ], [
+            'required' => 'Le champ :attribute est obligatoire',
+        ]);
+        try {
+            $commentaire = Commentaire::find($id);
+            $commentaire->update($request->all());
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e
+            ],422
+            );
+        }
+        return response()->json([
+            'status' => true,
+            'message' => "Réservation créée",
+            'comment' => $commentaire
+        ], 200);
+    }
 }
