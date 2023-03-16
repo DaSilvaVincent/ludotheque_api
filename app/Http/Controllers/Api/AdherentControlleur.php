@@ -29,6 +29,12 @@ class AdherentControlleur extends Controller
             'password' => Hash::make($request['password']),
         ]);
         $token = Auth::login($user);
+        if (!$token) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized',
+            ], 422);
+        }
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
