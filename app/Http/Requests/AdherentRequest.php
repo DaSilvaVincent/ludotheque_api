@@ -26,10 +26,10 @@ class AdherentRequest extends FormRequest
         return [
             'login' => "required|string|between:5,50",
             'email' => "required|string|between:5,50",
-            'name' => "required|string|between:5,50",
+            'nom' => "required|string|between:5,50",
             'password' => "required|string|between:5,50",
             'prenom' => "required|string|between:5,50",
-            'pseudo ' => "required|string|between:5,50"
+            'pseudo' => "required|string|between:5,50"
         ];
     }
 
