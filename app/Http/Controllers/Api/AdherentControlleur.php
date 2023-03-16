@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdherentRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,22 +64,21 @@ class AdherentControlleur extends Controller
             'pseudo' => $request['pseudo'],
             'password' => Hash::make($request['password']),
         ]);
-        $token = Auth::login($user);
-        if (!$token) {
+        try {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-            ], 422);
+                'status' => 'success',
+                'message' => 'User created successfully',
+                'user' => $user,
+                'authorisation' => [
+                    'type' => 'bearer',
+                ]
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e
+            ],422
+            );
         }
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User created successfully',
-            'user' => $user,
-            'authorisation' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ],200);
     }
 
     /**
@@ -92,5 +92,6 @@ class AdherentControlleur extends Controller
             'message' => 'Successfully logged out'
         ]);
     }
+
 
 }
