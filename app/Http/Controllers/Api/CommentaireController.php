@@ -80,4 +80,32 @@ class CommentaireController extends Controller
             'comment' => $commentaire
         ], 200);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  CommentaireRequest $request
+     * @return JsonResponse
+     */
+    public function delete(CommentaireRequest $request){
+        $request->validate([
+            'id' => 'required',
+        ], [
+            'required' => 'Le champ :attribute est obligatoire'
+        ]);
+        try {
+            $commentaire = Commentaire::find($request);
+            $commentaire->delete();
+        } catch (Exception $e){
+            return response()->json([
+                'message' => $e
+            ],422
+            );
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Comment successfully deleted'
+        ],200
+        );
+    }
 }
