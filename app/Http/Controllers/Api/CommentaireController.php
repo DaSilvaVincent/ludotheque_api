@@ -89,7 +89,7 @@ class CommentaireController extends Controller
      */
     public function delete(CommentaireRequest $request){
         $request->validate([
-            'id' => 'required',
+            'adherent_id' => 'required',
         ], [
             'required' => 'Le champ :attribute est obligatoire'
         ]);
