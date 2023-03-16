@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdherentRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -62,8 +63,7 @@ class AdherentControlleur extends Controller
             'pseudo' => $request['pseudo'],
             'password' => Hash::make($request['password']),
         ]);
-        $essentiel = $request->only('email', 'password');
-        $token = Auth::attempt($essentiel);
+        $token = Auth::login($user);
         if (!$token) {
             return response()->json([
                 'status' => 'error',
@@ -79,6 +79,18 @@ class AdherentControlleur extends Controller
                 'type' => 'bearer',
             ]
         ],200);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function logout(): JsonResponse
+    {
+        Auth::logout();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully logged out'
+        ]);
     }
 
 }
