@@ -1,6 +1,4 @@
 <?php
-
-use App\Http\Controllers\Api\AdherentControlleur;
 use Illuminate\Support\Facades\Route;
 
 /*
