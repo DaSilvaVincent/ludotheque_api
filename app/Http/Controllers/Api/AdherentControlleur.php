@@ -4,61 +4,40 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdherentRequest;
-use App\Http\Resources\AdhrentRessource;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdherentControlleur extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): AnonymousResourceCollection
-    {
-        $adhrents = User::all();
-        return AdhrentRessource::collection($adhrents);
+
+    public function register(AdherentRequest $request) {
+        $request->validate([
+            'login' => "required|string|between:5,50",
+            'email' => "required|string|between:5,50",
+            'name' => "required|string|between:5,50",
+            'password' => "required|string|between:5,50",
+            'prenom' => "required|string|between:5,50",
+            'pseudo ' => "required|string|between:5,50"
+        ]);
+        $user = User::create([
+            'login' => $request['login'],
+            'email' => $request['email'],
+            'name' => $request['name'],
+            'prenom' => $request['prenom'],
+            'pseudo' => $request['pseudo'],
+            'password' => Hash::make($request['password']),
+        ]);
+        $token = Auth::login($user);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User created successfully',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ],200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param AdherentRequest $request
-     *
-     */
-    public function store(AdherentRequest $request)
-    {
-        $adhrent = new User();
-        $adhrent->login = $request['login'];
-        $adhrent->save();
-
-
-
-
-
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
