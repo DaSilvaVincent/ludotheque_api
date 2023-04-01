@@ -12,16 +12,45 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use OpenApi\Attributes as OA;
+
+
 
 class AdherentControlleur extends Controller
 {
+    #[OA\Post(
+    path: "/adherent",
+    operationId: "login",
+    description: "Visitor login",
+    requestBody: new OA\RequestBody(
+        required: true,
+    ),
+    tags: ["Adherent"],
+    responses: [new OA\Response(response: 200,
+        description: "Visitor login",
+        content: new OA\JsonContent(properties: [
+            new OA\Property(property: "status", type: "boolean"),
+            new OA\Property(property: "message", type: "string"),
+            new OA\Property(property: "email|password", type: "array", items: new OA\Items(type: "string"))
+            ], type: "object")),
+        new OA\Response(response: 422,
+            description: "Visitor login",
+            content: new OA\JsonContent(properties: [
+                new OA\Property(property: "message", type: "string"),
+                new OA\Property(property: "errors", properties: [
+                ], type: "object"
+                ),
+            ], type: "object"))
+    ],
+    )]
     /**
      * A visitor's connection request.
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function loginVisitor(Request $request) {
+    public function loginVisitor(Request $request): JsonResponse
+    {
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
