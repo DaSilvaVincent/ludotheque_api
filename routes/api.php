@@ -19,9 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
+    Route::post('loginVisitor', 'loginVisitor');
+    Route::post('registerVisitor', 'registerVisitor');
+    Route::post('logoutVisitor', 'logoutVisitor');
 });
 /*
 Route::get('/adherent/{id}', [AdherentControlleur::class, 'show']);
