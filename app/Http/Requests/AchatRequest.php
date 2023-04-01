@@ -25,7 +25,7 @@ class AchatRequest extends FormRequest {
         return ['date_achat' => "required",
             'lieu_achat' => "required",
             'prix' => "required",
-            'adherent_id' => "required",
+            'user_id' => "required",
             'jeu_id' => "required"];
     }
 

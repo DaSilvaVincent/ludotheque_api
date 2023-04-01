@@ -26,13 +26,13 @@ Route::prefix('jeu')->group(function () {
     Route::post('/createJeu', [JeuController::class, 'storeJeu'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.storeJeu');
-    Route::put('/{id}', [JeuController::class, 'updateJeu'])
+    Route::put('/updateJeu/{id}', [JeuController::class, 'updateJeu'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.updateJeu');
-    Route::put('/{id}', [JeuController::class, 'updateUrl'])
+    Route::put('/updateUrl/{id}', [JeuController::class, 'updateUrl'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.updateUrl');
-    Route::post('/CreateAchat', [JeuController::class, 'storeAchat'])
+    Route::post('/createAchat', [JeuController::class, 'storeAchat'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.storeAchat');
 

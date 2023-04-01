@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AchatRequest;
 use App\Http\Requests\JeuRequest;
 use App\Http\Resources\JeuRessource;
 use App\Models\Achat;
@@ -58,7 +59,7 @@ class JeuController extends Controller
     }
 
     public function updateUrl(Request $request, $id) {
-        try {
+
             $this->validate($request, [
                 'url_media' => 'required',
             ]);
@@ -66,19 +67,17 @@ class JeuController extends Controller
             $jeu->url_media = $request->input('url_media');
             $jeu->save();
             return response()->json(['status' => 'success', 'message' => "Game url media updated successfully!", 'url_media' => $jeu->url_media], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => 'error', 'message' => "Error Game url media", 'error' => $e,], 422);
-        }
+
     }
 
-    public function storeAchat(JeuRequest $request) {
+    public function storeAchat(AchatRequest $request) {
         // Ici les données ont été validées dans la classe JeuRequest
         try {
             $achat = new Achat();
             $achat->date_achat = $request->date_achat;
             $achat->lieu_achat = $request->lieu_achat;
             $achat->prix = $request->prix;
-            $achat->adherent_id = $request->adherent_id;
+            $achat->user_id = $request->user_id;
             $achat->jeu_id = $request->jeu_id;
             $achat->save();
             return response()->json(['status' => "success", 'message' => "Game created successfully!", 'achat' => $achat]);
