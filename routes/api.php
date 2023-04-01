@@ -20,9 +20,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('jeu')->group(function () {
-    Route::get('/', [JeuController::class, 'index'])
+    Route::get('/', [JeuController::class, 'indexJeuVisiteur'])
         ->middleware(['auth', 'role:visiteur'])
-        ->name('jeu.index ');
+        ->name('jeu.indexJeuVisiteur');
+    Route::get('/', [JeuController::class, 'indexJeuAdherent'])
+        ->middleware(['auth', 'role:adherent'])
+        ->name('jeu.indexJeuAdherent');
     Route::post('/createJeu', [JeuController::class, 'storeJeu'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.storeJeu');

@@ -12,19 +12,28 @@ use App\Models\Jeu;
 use App\Models\Like;
 use Exception;
 use Illuminate\Http\Request;
+use Ramsey\Collection\Collection;
 
 class JeuController extends Controller
 {
-    public function index(Request $request = null) {
+    public function indexJeuVisiteur() {
         $jeux = Jeu::all();
-        if(!empty($request)) {
-            foreach ($jeux as $jeu) {
-                if ($request->age_min < $jeu->age_min) {
-                    $jeux->forget($jeu);
-                }
-            }
+        $lesJeux = [];
+        for ($i=0;$i<5;$i++) {
+            $lesJeux[$i] = $jeux[$i];
         }
-        return JeuRessource::collection($jeux);
+        return JeuRessource::collection($lesJeux);
+    }
+
+    public function indexJeuAdherent(Request $request) {
+        $age_min = $request->input('age_min', -1);
+        $nb_joueur_min =  $request->input('nb_joueur_min', max(Jeu::pluck('nombre_joueurs_min')->toArray()));
+        $sort = $request->input('sort',"asc");
+        $jeux = Jeu::where('nombre_joueurs_min', '<=', $nb_joueur_min)->where('age_min', '>=', $age_min)->get();
+        if($sort=="desc")
+            return JeuRessource::collection($jeux->sortByDesc('nom'));
+        else
+            return JeuRessource::collection($jeux->sortBy('nom'));
     }
 
     public function storeJeu(JeuRequest $request) {
