@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'nom'=> fake()->text,
             'prenom' => fake()->text,
             'pseudo' => fake()->text,
-            'avatar' => fake()->text,
+            'avatar' => sprintf("images/avatars/avatar-%d.png",$this->faker->numberBetween(1,2)),
             'remember_token' => Str::random(10),
         ];
     }
