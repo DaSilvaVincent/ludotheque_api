@@ -58,9 +58,9 @@ Route::prefix('jeu')->group(function () {
 });
 
 Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
+    Route::post('loginVisitor', 'loginVisitor');
+    Route::post('registerVisitor', 'registerVisitor');
+    Route::post('logoutVisitor', 'logoutVisitor');
 });
 
 Route::controller(\App\Http\Controllers\Api\AuthController::class)->group(function(){
