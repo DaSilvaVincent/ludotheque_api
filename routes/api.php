@@ -23,7 +23,20 @@ Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(f
     Route::post('register', 'register');
     Route::post('logout', 'logout');
 });
-
+/*
 Route::get('/adherent/{id}', [AdherentControlleur::class, 'show']);
 Route::put('/adherent/{id}', [AdherentControlleur::class, 'updateProfile']);
 Route::put('/adherent/{id}/avatar', [AdherentControlleur::class,'updateAvatar']);
+*/
+
+Route::prefix('adherent')->group(function () {
+    Route::get('/', [AdherentControlleur::class, 'show'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('adherent.show');
+    Route::put('/{id}', [AdherentControlleur::class, 'updateProfile'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('adherent.updateProfile');
+    Route::put('/{id}/avatar', [AdherentControlleur::class, 'updateAvatar'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('adherent.updateAvatar');
+});
