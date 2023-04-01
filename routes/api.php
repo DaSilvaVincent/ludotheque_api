@@ -23,7 +23,7 @@ Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(f
     Route::post('register', 'register');
     Route::post('logout', 'logout');
 });
+
 Route::get('/adherent/{id}', [AdherentControlleur::class, 'show']);
 Route::put('/adherent/{id}', [AdherentControlleur::class, 'updateProfile']);
-Route::post('/adherent/{id}/avatar', [AdherentControlleur::class, 'updateAvatar']);
-
+Route::put('/adherent/{id}/avatar', [AdherentControlleur::class,'updateAvatar']);
