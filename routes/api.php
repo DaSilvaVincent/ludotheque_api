@@ -35,6 +35,9 @@ Route::prefix('jeu')->group(function () {
     Route::post('/createAchat', [JeuController::class, 'storeAchat'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.storeAchat');
+    Route::post('/showJeu/{id}', [JeuController::class, 'showJeu'])
+        ->middleware(['auth', 'role:adherent'])
+        ->name('jeu.showJeu');
 
 });
 

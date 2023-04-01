@@ -7,7 +7,9 @@ use App\Http\Requests\AchatRequest;
 use App\Http\Requests\JeuRequest;
 use App\Http\Resources\JeuRessource;
 use App\Models\Achat;
+use App\Models\Commentaire;
 use App\Models\Jeu;
+use App\Models\Like;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -59,7 +61,7 @@ class JeuController extends Controller
     }
 
     public function updateUrl(Request $request, $id) {
-
+        try {
             $this->validate($request, [
                 'url_media' => 'required',
             ]);
@@ -67,7 +69,9 @@ class JeuController extends Controller
             $jeu->url_media = $request->input('url_media');
             $jeu->save();
             return response()->json(['status' => 'success', 'message' => "Game url media updated successfully!", 'url_media' => $jeu->url_media], 200);
-
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => "Error Game url media", 'error' => $e,], 422);
+        }
     }
 
     public function storeAchat(AchatRequest $request) {
@@ -84,6 +88,16 @@ class JeuController extends Controller
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => "Error game create", 'error' => $e],422);
         }
+    }
+
+    public function showJeu($id) {
+            $jeu = Jeu::findOrFail($id);
+            $achat = Achat::all()->where('jeu_id', '=' ,$id);
+            $commentaire = Commentaire::all()->where('jeu_id', '=' ,$id);
+            $like = Like::all()->where('jeu_id', '=', $id);
+            error_log($like);
+            $nbLike = count($like);
+            return response()->json(['status' => 'success', 'message' => "Full info of game", 'achats' => $achat, 'commentaires' => $commentaire, 'jeu' => $jeu, 'nb_likes' => $nbLike], 200);
     }
 
 }
