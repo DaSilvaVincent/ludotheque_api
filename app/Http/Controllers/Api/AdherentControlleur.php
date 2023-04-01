@@ -15,23 +15,13 @@ use Illuminate\Support\Facades\Storage;
 
 class AdherentControlleur extends Controller
 {
-
-    public function __construct() {
-        $this->middleware('auth:api', [
-            'except' => [
-                'login',
-                'register'
-            ]
-        ]);
-    }
-
     /**
      * A visitor's connection request.
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function login(Request $request) {
+    public function loginVisitor(Request $request) {
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -61,7 +51,7 @@ class AdherentControlleur extends Controller
      * @param AdherentRequest $request
      * @return JsonResponse
      */
-    public function register(AdherentRequest $request) {
+    public function registerVisitor(AdherentRequest $request) {
         $request->validate([
             'login' => "required|string|between:5,50",
             'nom' => 'required|string|max:255',
@@ -103,7 +93,7 @@ class AdherentControlleur extends Controller
      *
      * @return JsonResponse
      */
-    public function logout(): JsonResponse
+    public function logoutVisitor(): JsonResponse
     {
         Auth::logout();
         return response()->json([
@@ -175,7 +165,7 @@ class AdherentControlleur extends Controller
             $this->validate($request, [
                 'avatar' => 'required',
             ]);
-            $user = User::find($id);
+            $user = User::findOrFail($id);
             $user->avatar = $request->input('avatar');
             $user->save();
             return response()->json([
