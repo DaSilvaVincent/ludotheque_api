@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use JetBrains\PhpStorm\ArrayShape;
 
 class JeuRequest extends FormRequest {
     /**
@@ -24,12 +25,14 @@ class JeuRequest extends FormRequest {
         return ['nom' => "required|string|between:5,50",
             'description' => "required|string|between:5,500",
             'langue' => "required|string",
-            'age_min' => "required|number|between:4,18",
+            'age_min' => "required|integer|between:4,18",
             'nombre_joueurs_min' => "required|integer|between:1,4",
             'nombre_joueurs_max' => "required|integer|between:5,8",
             'duree_partie' => "required|string|",
-            'categorie' => "required|number|",
-            'theme' => "required|number|",
-            'editeur' => "required|number|"];
+            'categorie_id' => "required|integer",
+            'theme_id' => "required|integer",
+            'editeur_id' => "required|integer"];
     }
+
 }
+
