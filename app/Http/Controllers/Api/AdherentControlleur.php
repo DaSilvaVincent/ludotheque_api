@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdherentControlleur extends Controller
 {
@@ -24,6 +25,12 @@ class AdherentControlleur extends Controller
         ]);
     }
 
+    /**
+     * A visitor's connection request.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function login(Request $request) {
         $request->validate([
             'email' => 'required|string|email',
@@ -48,7 +55,12 @@ class AdherentControlleur extends Controller
         ],200);
     }
 
-
+    /**
+     * The request for registration.
+     *
+     * @param AdherentRequest $request
+     * @return JsonResponse
+     */
     public function register(AdherentRequest $request) {
         $request->validate([
             'login' => "required|string|between:5,50",
@@ -87,6 +99,8 @@ class AdherentControlleur extends Controller
     }
 
     /**
+     * A member's disconnection request.
+     *
      * @return JsonResponse
      */
     public function logout(): JsonResponse
@@ -98,23 +112,37 @@ class AdherentControlleur extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
     public function show(int $id): JsonResponse
-        {
-            try {
-                $adherent = User::findOrFail($id);
-                return response()->json([
-                    'status' => 'success',
-                    'message' => "Profil successfully!",
-                    'adherent' => $adherent
-                ], 200);
-            } catch (Exception $e) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => "Error profil",
-                    'error' => $e->getMessage()
-                ], 403);
-            }
-}
+    {
+        try {
+            $adherent = User::findOrFail($id);
+            return response()->json([
+                'status' => 'success',
+                'message' => "Profil successfully!",
+                'adherent' => $adherent
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Error profil",
+                'error' => $e
+            ], 403);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param AdherentRequest $request
+     * @param $id
+     * @return JsonResponse
+     */
     public function updateProfile(AdherentRequest $request, $id)
     {
         try {
@@ -133,26 +161,34 @@ class AdherentControlleur extends Controller
             ], 422);
         }
     }
-    public function updateAvatar(AdherentRequest $request, $id)
+
+    /**
+     * Update the avatar in storage.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function updateAvatar(Request $request,int $id): JsonResponse
     {
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-        $adherent = User::findOrFail($id);
-        if ($request->user()->hasRole('admin') || $request->user()->id === $adherent->user_id) {
-            $file = $request->file('avatar');
-            $filename = time() . '_' . $file;
-            $path = $file->storeAs('public/avatars', $filename);
-            $adherent->avatar_url = asset('storage/avatars/' . $filename);
-            $adherent->save();
+        try {
+            $this->validate($request, [
+                'avatar' => 'required',
+            ]);
+            $user = User::find($id);
+            $user->avatar = $request->input('avatar');
+            $user->save();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Adherent avatar updated successfully',
-                'url_media' => $adherent->avatar_url
+                'message' => "Adherent avatar updated successfully!",
+                'url_media' => $user->avatar,
             ], 200);
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Error Avatar",
+                'error' => $e,
+            ], 422);
         }
     }
-
 }
