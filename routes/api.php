@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('commentaires')->group(function () {
     Route::post('/', [CommentaireController::class, 'create'])
         ->middleware(['auth', 'role:adherent'])
-        ->name('commentaires.store');
+        ->name('commentaires.create');
     Route::put('/{id}', [CommentaireController::class, 'edit'])
         ->middleware(['auth', 'role:commentaire-moderateur'])
         ->name('commentaires.update');
