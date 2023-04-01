@@ -12,42 +12,54 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use OpenApi\Attributes as OA;
+use OpenApi\Annotations as OA;
 
 
-
+/**
+ * @OA\Tag(
+ *     name="Visitor",
+ *     description="Visitor operations"
+ * )
+ */
 class AdherentControlleur extends Controller
 {
-    #[OA\Post(
-    path: "/adherent",
-    operationId: "login",
-    description: "Visitor login",
-    requestBody: new OA\RequestBody(
-        required: true,
-    ),
-    tags: ["Adherent"],
-    responses: [new OA\Response(response: 200,
-        description: "Visitor login",
-        content: new OA\JsonContent(properties: [
-            new OA\Property(property: "status", type: "boolean"),
-            new OA\Property(property: "message", type: "string"),
-            new OA\Property(property: "email|password", type: "array", items: new OA\Items(type: "string"))
-            ], type: "object")),
-        new OA\Response(response: 422,
-            description: "Visitor login",
-            content: new OA\JsonContent(properties: [
-                new OA\Property(property: "message", type: "string"),
-                new OA\Property(property: "errors", properties: [
-                ], type: "object"
-                ),
-            ], type: "object"))
-    ],
-    )]
     /**
-     * A visitor's connection request.
+     * À visitor's connection request.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/loginVisitor",
+     *     tags={"Adherent"},
+     *     summary="Logs in a visitor",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Visitor's email and password",
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="password", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful login",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="user", type="object", description="The logged in user", ref="#/components/schemas/User"),
+     *             @OA\Property(property="authorisation", type="object",
+     *                 @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."),
+     *                 @OA\Property(property="type", type="string", example="bearer")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
      */
     public function loginVisitor(Request $request): JsonResponse
     {
@@ -77,8 +89,43 @@ class AdherentControlleur extends Controller
     /**
      * The request for registration.
      *
-     * @param AdherentRequest $request
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/registerVisitor",
+     *     tags={"Adherent"},
+     *     summary="Logs in a visitor",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Visitor's register",
+     *         @OA\JsonContent(
+     *             required={"login","nom","email","prenom","pseudo"},
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="login", type="string"),
+     *             @OA\Property(property="nom", type="string"),
+     *             @OA\Property(property="prenom", type="string"),
+     *             @OA\Property(property="pseudo", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="user", type="object", description="The logged in user", ref="#/components/schemas/User"),
+     *             @OA\Property(property="authorisation", type="object",
+     *                 @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."),
+     *                 @OA\Property(property="type", type="string", example="bearer")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
      */
     public function registerVisitor(AdherentRequest $request) {
         $request->validate([
@@ -120,7 +167,24 @@ class AdherentControlleur extends Controller
     /**
      * A member's disconnection request.
      *
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/logoutVisitor",
+     *     tags={"Adherent"},
+     *     summary="Logs in a visitor",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="logout",
+     *           ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful register",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="authorisation", type="object",
+     *             )
+     *         )
+     *     ),
+     *
      */
     public function logoutVisitor(): JsonResponse
     {
@@ -134,8 +198,42 @@ class AdherentControlleur extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/adherent/{id}",
+     *     tags={"Adherent"},
+     *     summary="Logs in a visitor",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="show profil",
+     *         @OA\JsonContent(
+     *             required={"login","nom","email","prenom","pseudo","password"},
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="login", type="string"),
+     *             @OA\Property(property="nom", type="string"),
+     *             @OA\Property(property="prenom", type="string"),
+     *             @OA\Property(property="pseudo", type="string")
+     *             @OA\Property(property="password", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful show profil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="user", type="object", description="The logged in user", ref="#/components/schemas/User"),
+     *             @OA\Property(property="authorisation", type="object"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
      */
     public function show(int $id): JsonResponse
     {
@@ -156,11 +254,43 @@ class AdherentControlleur extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     *  Update the specified resource in storage.
      *
-     * @param AdherentRequest $request
-     * @param $id
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/adherent/{id}",
+     *     tags={"Adherent"},
+     *     summary="Logs in a visitor",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Update profil",
+     *         @OA\JsonContent(
+     *             required={"login","nom","email","prenom","pseudo","password"},
+     *             @OA\Property(property="email", type="string", format="email"),
+     *             @OA\Property(property="login", type="string"),
+     *             @OA\Property(property="nom", type="string"),
+     *             @OA\Property(property="prenom", type="string"),
+     *             @OA\Property(property="pseudo", type="string")
+     *             @OA\Property(property="password", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful update profil",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="user", type="object", description="The logged in user", ref="#/components/schemas/User"),
+     *             @OA\Property(property="authorisation", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
      */
     public function updateProfile(AdherentRequest $request, $id)
     {
@@ -182,11 +312,38 @@ class AdherentControlleur extends Controller
     }
 
     /**
-     * Update the avatar in storage.
+     *  Update the avatar in storage.
      *
-     * @param Request $request
-     * @param int $id
-     * @return JsonResponse
+     * @OA\Post(
+     *     path="/api/adherent/{id}/avatar",
+     *     tags={"Adherent"},
+     *     summary="Logs in a visitor",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Update avatar",
+     *         @OA\JsonContent(
+     *             required={"avatar"},
+     *             @OA\Property(property="avatar", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful update avatar",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="user", type="object", description="The logged in user", ref="#/components/schemas/User"),
+     *             @OA\Property(property="authorisation", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
      */
     public function updateAvatar(Request $request,int $id): JsonResponse
     {
