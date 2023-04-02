@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::prefix('commentaires')->group(function () {
-    Route::post('/', [CommentaireController::class, 'create'])
+    Route::post('/createCommentaire', [CommentaireController::class, 'create'])
         ->middleware(['auth', 'role:adherent'])
         ->name('commentaires.create');
     Route::put('/{id}', [CommentaireController::class, 'edit'])
@@ -35,10 +35,10 @@ Route::prefix('commentaires')->group(function () {
 });
 
 Route::prefix('jeu')->group(function () {
-    Route::get('/', [JeuController::class, 'indexJeuVisiteur'])
+    Route::get('/indexVisiteur', [JeuController::class, 'indexJeuVisiteur'])
         ->middleware(['auth', 'role:visiteur'])
         ->name('jeu.indexJeuVisiteur');
-    Route::get('/', [JeuController::class, 'indexJeuAdherent'])
+    Route::get('/indexAdherent', [JeuController::class, 'indexJeuAdherent'])
         ->middleware(['auth', 'role:adherent'])
         ->name('jeu.indexJeuAdherent');
     Route::post('/createJeu', [JeuController::class, 'storeJeu'])
@@ -50,10 +50,10 @@ Route::prefix('jeu')->group(function () {
     Route::put('/updateUrl/{id}', [JeuController::class, 'updateUrl'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.updateUrl');
-    Route::post('/createAchat', [JeuController::class, 'storeAchat'])
+    Route::get('/createAchat', [JeuController::class, 'storeAchat'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.storeAchat');
-    Route::post('/showJeu/{id}', [JeuController::class, 'showJeu'])
+    Route::get('/showJeu/{id}', [JeuController::class, 'showJeu'])
         ->middleware(['auth', 'role:adherent'])
         ->name('jeu.showJeu');
 });

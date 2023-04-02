@@ -19,8 +19,17 @@ class RoleUserSeeder extends Seeder
                 $user->roles()->attach($j);
             $user->save();
         }
-        $vincent = User::findOrFail(11);
-        $vincent->roles()->attach([4,3,2,1]);
-        $vincent->save();
+        $vincentAdmin = User::findOrFail(11);
+        $vincentAdmin->roles()->attach([4,3,2,1]);
+        $vincentAdmin->save();
+        $vincentAdherentPrem = User::findOrFail(12);
+        $vincentAdherentPrem->roles()->attach([4,3,2]);
+        $vincentAdherentPrem->save();
+        $vincentAdherent = User::findOrFail(13);
+        $vincentAdherent->roles()->attach([4,3]);
+        $vincentAdherent->save();
+        $vincentVisiteur = User::findOrFail(14);
+        $vincentVisiteur->roles()->attach([4]);
+        $vincentVisiteur->save();
     }
 }

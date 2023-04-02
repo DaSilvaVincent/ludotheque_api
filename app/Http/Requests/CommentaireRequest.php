@@ -24,11 +24,11 @@ class CommentaireRequest extends FormRequest
     public function rules()
     {
         return [
-            'commentaire' => "required|string",
-            'date_com' => "required|date",
-            'note' => "required|number|between:0,5",
-            'jeu_id' => "required|number",
-            'adherent_id' => "required|number",
+            'commentaire' => "required",
+            'date_com' => "required",
+            'note' => "required",
+            'jeu_id' => "required",
+            'adherent_id' => "required",
         ];
     }
 }

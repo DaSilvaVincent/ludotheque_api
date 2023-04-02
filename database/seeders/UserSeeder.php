@@ -13,7 +13,43 @@ class UserSeeder extends Seeder
         User::factory(10)->create();
         User::factory()->create([
             'login' => "vincent",
-            'email' => "vincent@domain.fr",
+            'email' => "vincentAdmin@domain.fr",
+            'email_verified_at' => now(),
+            'password' => Hash::make('UnSecret'),
+            'valide' => true,
+            'nom' => "vincent",
+            'prenom' => "vinz",
+            'pseudo' => "das",
+            'avatar' => "/ap/test",
+            'remember_token' => Str::random(10),
+        ]);
+        User::factory()->create([
+            'login' => "vincent",
+            'email' => "vincentAdherentPrem@domain.fr",
+            'email_verified_at' => now(),
+            'password' => Hash::make('UnSecret'),
+            'valide' => true,
+            'nom' => "vincent",
+            'prenom' => "vinz",
+            'pseudo' => "das",
+            'avatar' => "/ap/test",
+            'remember_token' => Str::random(10),
+        ]);
+        User::factory()->create([
+            'login' => "vincent",
+            'email' => "vincentAdherent@domain.fr",
+            'email_verified_at' => now(),
+            'password' => Hash::make('UnSecret'),
+            'valide' => true,
+            'nom' => "vincent",
+            'prenom' => "vinz",
+            'pseudo' => "das",
+            'avatar' => "/ap/test",
+            'remember_token' => Str::random(10),
+        ]);
+        User::factory()->create([
+            'login' => "vincent",
+            'email' => "vincentVisitor@domain.fr",
             'email_verified_at' => now(),
             'password' => Hash::make('UnSecret'),
             'valide' => true,
