@@ -58,11 +58,11 @@ Route::prefix('jeu')->group(function () {
         ->name('jeu.showJeu');
 });
 
-/*
-Route::get('/adherent/{id}', [AdherentControlleur::class, 'show']);
-Route::put('/adherent/{id}', [AdherentControlleur::class, 'updateProfile']);
-Route::put('/adherent/{id}/avatar', [AdherentControlleur::class,'updateAvatar']);
-*/
+Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(function () {
+    Route::post('loginVisitor', 'loginVisitor');
+    Route::post('registerVisitor', 'registerVisitor');
+    Route::post('logoutVisitor', 'logoutVisitor');
+});
 
 Route::prefix('adherent')->group(function () {
     Route::get('/', [AdherentControlleur::class, 'show'])
@@ -74,12 +74,6 @@ Route::prefix('adherent')->group(function () {
     Route::put('/{id}/avatar', [AdherentControlleur::class, 'updateAvatar'])
         ->middleware(['auth', 'role:admin'])
         ->name('adherent.updateAvatar');
-});
-
-Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(function () {
-    Route::post('loginVisitor', 'loginVisitor');
-    Route::post('registerVisitor', 'registerVisitor');
-    Route::post('logoutVisitor', 'logoutVisitor');
 });
 
 Route::controller(\App\Http\Controllers\Api\AuthController::class)->group(function(){
