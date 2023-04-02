@@ -28,7 +28,7 @@ class CommentaireRequest extends FormRequest
             'date_com' => "required",
             'note' => "required",
             'jeu_id' => "required",
-            'adherent_id' => "required",
+            'user_id' => "required",
         ];
     }
 }

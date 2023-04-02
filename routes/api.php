@@ -26,10 +26,10 @@ Route::prefix('commentaires')->group(function () {
     Route::post('/createCommentaire', [CommentaireController::class, 'create'])
         ->middleware(['auth', 'role:adherent'])
         ->name('commentaires.create');
-    Route::put('/{id}', [CommentaireController::class, 'edit'])
+    Route::put('/updateCommentaire/{id}', [CommentaireController::class, 'edit'])
         ->middleware(['auth', 'role:commentaire-moderateur'])
         ->name('commentaires.update');
-    Route::delete('/{id}', [CommentaireController::class, 'delete'])
+    Route::delete('/deleteCommentaire/{id}', [CommentaireController::class, 'delete'])
         ->middleware(['auth', 'role:commentaire-moderateur'])
         ->name('commentaires.delete');
 });

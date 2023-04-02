@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentaireRequest;
 use App\Models\Commentaire;
 use Exception;
+use http\Client\Request;
 use Illuminate\Http\JsonResponse;
 
 class CommentaireController extends Controller
@@ -22,24 +23,19 @@ class CommentaireController extends Controller
             'date_com' => "required",
             'note' => "required",
             'jeu_id' => "required",
-            'adherent_id' => "required",
+            'user_id' => "required",
         ], [
             'required' => 'Le champ :attribute est obligatoire',
         ]);
-        try {
+
             $commentaire = Commentaire::create([
                 'commentaire' => $request->commentaire,
                 'date_com' => $request->date_com,
                 'note' => $request->note,
                 'jeu_id' => $request->jeu_id,
-                'adherent_id' => $request->adherent_id,
+                'user_id' => $request->user_id,
             ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => $e
-            ],422
-            );
-        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Client created successfully',
@@ -61,7 +57,7 @@ class CommentaireController extends Controller
             'date_com' => "required",
             'note' => "required",
             'jeu_id' => "required",
-            'adherent_id' => "required",
+            'user_id' => "required",
         ], [
             'required' => 'Le champ :attribute est obligatoire',
         ]);
@@ -76,7 +72,7 @@ class CommentaireController extends Controller
         }
         return response()->json([
             'status' => true,
-            'message' => "Réservation créée",
+            'message' => "Comment updated successfully",
             'comment' => $commentaire
         ], 200);
     }
@@ -87,14 +83,9 @@ class CommentaireController extends Controller
      * @param  CommentaireRequest $request
      * @return JsonResponse
      */
-    public function delete(CommentaireRequest $request){
-        $request->validate([
-            'adherent_id' => 'required',
-        ], [
-            'required' => 'Le champ :attribute est obligatoire'
-        ]);
+    public function delete($id){
         try {
-            $commentaire = Commentaire::find($request);
+            $commentaire = Commentaire::find($id);
             $commentaire->delete();
         } catch (Exception $e){
             return response()->json([

@@ -10,4 +10,8 @@ class Commentaire extends Model
     use HasFactory;
 
     protected $table = 'commentaire';
+
+    protected $fillable = [
+        'commentaire', 'date_com', 'note', 'jeu_id','user_id'
+    ];
 }

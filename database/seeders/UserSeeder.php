@@ -25,6 +25,18 @@ class UserSeeder extends Seeder
         ]);
         User::factory()->create([
             'login' => "vincent",
+            'email' => "vincentModerateur@domain.fr",
+            'email_verified_at' => now(),
+            'password' => Hash::make('UnSecret'),
+            'valide' => true,
+            'nom' => "vincent",
+            'prenom' => "vinz",
+            'pseudo' => "das",
+            'avatar' => "/ap/test",
+            'remember_token' => Str::random(10),
+        ]);
+        User::factory()->create([
+            'login' => "vincent",
             'email' => "vincentAdherentPrem@domain.fr",
             'email_verified_at' => now(),
             'password' => Hash::make('UnSecret'),
