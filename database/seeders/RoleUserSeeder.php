@@ -15,7 +15,7 @@ class RoleUserSeeder extends Seeder
     {
         for ($i = 1; $i <= 10; $i++) {
             $user = User::findOrFail($i);
-            for ($j = $i; $j <= 4; $j++)
+            for ($j = $i; $j <= 5; $j++)
                 $user->roles()->attach($j);
             $user->save();
         }

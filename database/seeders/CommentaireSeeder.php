@@ -3,44 +3,95 @@
 namespace Database\Seeders;
 
 use App\Models\Commentaire;
+use App\Models\Jeu;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Generator;
+use Illuminate\Container\Container;
 
-class CommentaireSeeder extends Seeder
-{
+class CommentaireSeeder extends Seeder {
+
+    protected $faker;
+
+    public function __construct() {
+        $this->faker = $this->withFaker();
+    }
+
+    protected function withFaker() {
+        return Container::getInstance()->make(Generator::class);
+    }
+
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
+    public function run(): void {
+        $jeu = Jeu::all()->pluck('id');
+        $user = User::all()->pluck('id');
+
         Commentaire::factory()->create([
-            'user_id' => 1,
-            'jeu_id' => 1,
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
             'commentaire' => "Le jeu est sympa mais sans plus",
-            'date_com' => Carbon::parse('2022-05-08'),
-            'note' => 3,
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
         ]);
         Commentaire::factory()->create([
-            'user_id' => 2,
-            'jeu_id' => 1,
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
             'commentaire' => "Le meilleur jeu en famille",
-            'date_com' => Carbon::parse('2023-02-02'),
-            'note' => 4,
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
         ]);
         Commentaire::factory()->create([
-            'user_id' => 3,
-            'jeu_id' => 2,
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
             'commentaire' => "Gardez votre argents",
-            'date_com' => Carbon::parse('2022-09-10'),
-            'note' => 0,
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
         ]);
         Commentaire::factory()->create([
-            'user_id' => 5,
-            'jeu_id' => 4,
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
             'commentaire' => "Parfait",
-            'date_com' => Carbon::parse('2022-12-03'),
-            'note' => 5,
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
+        ]);
+        Commentaire::factory()->create([
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
+            'commentaire' => "Trés bon jeu",
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
+        ]);
+        Commentaire::factory()->create([
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
+            'commentaire' => "j'aurais aimer avoir sos ouistiti",
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
+        ]);
+        Commentaire::factory()->create([
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
+            'commentaire' => "Mon éditeur préférer n'est pas la",
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
+        ]);
+        Commentaire::factory()->create([
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
+            'commentaire' => "L'abonnement est trop cher",
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
+        ]);
+        Commentaire::factory()->create([
+            'user_id' => $this->faker->randomElement($user),
+            'jeu_id' => $this->faker->randomElement($jeu),
+            'commentaire' => "y'avais de la lumière je suis rentrer",
+            'date_com' => $this->faker->dateTime(),
+            'note' => $this->faker->randomElement($array = array(0,1,2,3,4,5)),
         ]);
     }
 }
+
