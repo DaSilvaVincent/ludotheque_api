@@ -11,25 +11,38 @@ use App\Models\Commentaire;
 use App\Models\Jeu;
 use App\Models\Like;
 use Exception;
+use Faker\Generator;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Ramsey\Collection\Collection;
 
 class JeuController extends Controller
 {
+    protected $faker;
+
+    public function __construct() {
+        $this->faker = $this->withFaker();
+    }
+
+    protected function withFaker() {
+        return Container::getInstance()->make(Generator::class);
+    }
     public function indexJeuVisiteur() {
-        $jeux = Jeu::all();
-        $lesJeux = [];
-        for ($i=0;$i<5;$i++) {
-            $lesJeux[$i] = $jeux[$i];
+        $jeux = [];
+        $lesIdJeux = Jeu::pluck('id');
+        for($i=0;$i<5;$i++) {
+            $idRand = $this->faker->randomElement($lesIdJeux);
+            $jeux[$i] = Jeu::where('id', '=', $idRand)->get();
+            $lesIdJeux->forget($idRand);
         }
-        return JeuRessource::collection($lesJeux);
+        return JeuRessource::collection($jeux);
     }
 
     public function indexJeuAdherent(Request $request) {
         $age_min = $request->input('age_min', -1);
         $nb_joueur_min =  $request->input('nb_joueur_min', max(Jeu::pluck('nombre_joueurs_min')->toArray()));
         $sort = $request->input('sort',"asc");
-        $jeux = Jeu::where('nombre_joueurs_min', '<=', $nb_joueur_min)->where('age_min', '>=', $age_min)->get();
+        $jeux = Jeu::where('nombre_joueurs_min', '>=', $nb_joueur_min)->where('age_min', '>=', $age_min)->get();
         if($sort=="desc")
             return JeuRessource::collection($jeux->sortByDesc('nom'));
         else
