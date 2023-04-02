@@ -8,6 +8,7 @@ use App\Models\Commentaire;
 use Exception;
 use http\Client\Request;
 use Illuminate\Http\JsonResponse;
+use OpenApi\Annotations as OA;
 
 class CommentaireController extends Controller
 {
@@ -16,6 +17,22 @@ class CommentaireController extends Controller
      *
      * @param  CommentaireRequest $request
      * @return JsonResponse
+     */
+    /**
+     * Add a comment to a game if you are an adherent
+     *
+     * @OA\Post(
+     *     path="/api/commentaires/createCommentaire",
+     *     tags={"Commentaires"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Comment created successfully"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error in comment creation"
+     *     )
+     * )
      */
     public function create(CommentaireRequest $request){
         $request->validate([
@@ -51,6 +68,22 @@ class CommentaireController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
+    /**
+     * Update the game's comment by his id if you are the owner of the comment or if you are a comment moderator
+     *
+     * @OA\Put(
+     *     path="/api/commentaires/updateCommentaire/id",
+     *     tags={"Commentaires"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Comment updated successfully"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error in comment update"
+     *     )
+     * )
+     */
     public function edit(CommentaireRequest $request, int $id){
         $request->validate([
             'commentaire' => "required",
@@ -82,6 +115,22 @@ class CommentaireController extends Controller
      *
      * @param  CommentaireRequest $request
      * @return JsonResponse
+     */
+    /**
+     * Delete the comment by his id if you are the owner of the comment or if you are a comment moderator
+     *
+     * @OA\Delete(
+     *     path="/api/commentaires/deleteCommentaire/id",
+     *     tags={"Commentaires"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Comment successfully deleted"
+     *     ),
+     *     @OA\Response(
+     *         response="422",
+     *         description="Error in comment delete"
+     *     )
+     * )
      */
     public function delete($id){
         try {
