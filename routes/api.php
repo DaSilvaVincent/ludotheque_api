@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CommentaireController;
 use App\Http\Controllers\Api\JeuController;
+use App\Http\Controllers\Api\AdherentControlleur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 
 Route::prefix('commentaires')->group(function () {
     Route::post('/', [CommentaireController::class, 'create'])
@@ -54,7 +56,30 @@ Route::prefix('jeu')->group(function () {
     Route::post('/showJeu/{id}', [JeuController::class, 'showJeu'])
         ->middleware(['auth', 'role:adherent'])
         ->name('jeu.showJeu');
+});
 
+/*
+Route::get('/adherent/{id}', [AdherentControlleur::class, 'show']);
+Route::put('/adherent/{id}', [AdherentControlleur::class, 'updateProfile']);
+Route::put('/adherent/{id}/avatar', [AdherentControlleur::class,'updateAvatar']);
+*/
+
+Route::prefix('adherent')->group(function () {
+    Route::get('/', [AdherentControlleur::class, 'show'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('adherent.show');
+    Route::put('/{id}', [AdherentControlleur::class, 'updateProfile'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('adherent.updateProfile');
+    Route::put('/{id}/avatar', [AdherentControlleur::class, 'updateAvatar'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('adherent.updateAvatar');
+});
+
+Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(function () {
+    Route::post('loginVisitor', 'loginVisitor');
+    Route::post('registerVisitor', 'registerVisitor');
+    Route::post('logoutVisitor', 'logoutVisitor');
 });
 
 Route::controller(\App\Http\Controllers\Api\AuthController::class)->group(function(){
