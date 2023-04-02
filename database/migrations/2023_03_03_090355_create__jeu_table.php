@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('nombre_joueurs_min');
             $table->integer('nombre_joueurs_max');
             $table->string('duree_partie');
-            $table->boolean('valide');
+            $table->boolean('valide')->default(true);
             $table->unsignedBigInteger('categorie_id');
             $table->foreign('categorie_id')->references('id')->on('categorie')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('theme_id');
