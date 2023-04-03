@@ -173,21 +173,15 @@ class AdherentControlleur extends Controller
      * @OA\Post(
      *     path="/api/logoutVisitor",
      *     tags={"Adherent"},
-     *     summary="Logs in a visitor",
+     *     summary="logout in a visitor",
      *     @OA\RequestBody(
      *         required=true,
-     *         description="logout",
-     *           ),
+     *         description="Visitor's logout"
+     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful register",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="authorisation", type="object",
-     *             )
-     *         )
+     *         description="Successful register";
      *     ),
-     *
      */
     public function logoutVisitor(): JsonResponse
     {
@@ -202,7 +196,7 @@ class AdherentControlleur extends Controller
     /**
      * Display the specified resource.
      *
-     * @OA\Post(
+     * @OA\Get(
      *     path="/api/{id}",
      *     tags={"Adherent"},
      *     summary="show profil",
@@ -263,7 +257,7 @@ class AdherentControlleur extends Controller
     /**
      *  Update the specified resource in storage.
      *
-     * @OA\Post(
+     * @OA\Put(
      *     path="/api/adherent/{id}",
      *     tags={"Adherent"},
      *     summary="Logs in a visitor",
@@ -330,7 +324,7 @@ class AdherentControlleur extends Controller
     /**
      *  Update the avatar in storage.
      *
-     * @OA\Post(
+     * @OA\Put(
      *     path="/api/adherent/{id}/avatar",
      *     tags={"Adherent"},
      *     summary="Logs in a visitor",
