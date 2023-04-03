@@ -65,14 +65,11 @@ Route::controller(\App\Http\Controllers\Api\AdherentControlleur::class)->group(f
 });
 
 Route::prefix('adherent')->group(function () {
-    Route::get('/', [AdherentControlleur::class, 'show'])
-        ->middleware(['auth', 'role:admin'])
+    Route::get('/{id}', [AdherentControlleur::class, 'show'])
         ->name('adherent.show');
     Route::put('/{id}', [AdherentControlleur::class, 'updateProfile'])
-        ->middleware(['auth', 'role:admin'])
         ->name('adherent.updateProfile');
     Route::put('/{id}/avatar', [AdherentControlleur::class, 'updateAvatar'])
-        ->middleware(['auth', 'role:admin'])
         ->name('adherent.updateAvatar');
 });
 
