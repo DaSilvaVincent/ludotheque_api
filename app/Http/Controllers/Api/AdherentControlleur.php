@@ -7,19 +7,19 @@ use App\Http\Requests\AdherentRequest;
 use App\Http\Resources\AdhrentResource;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
 use OpenApi\Annotations as OA;
 
 
 /**
  * @OA\Tag(
- *     name="Visitor",
- *     description="Visitor operations"
+ *     name="Adherent",
+ *     description="Adherent operations"
  * )
  */
 class AdherentControlleur extends Controller
@@ -30,7 +30,7 @@ class AdherentControlleur extends Controller
      * @OA\Post(
      *     path="/api/loginVisitor",
      *     tags={"Adherent"},
-     *     summary="Logs in a visitor",
+     *     summary="logs in a visitor",
      *     @OA\RequestBody(
      *         required=true,
      *         description="Visitor's email and password",
@@ -79,13 +79,12 @@ class AdherentControlleur extends Controller
         $user = Auth::user();
         return response()->json([
             'status' => 'success',
-            'message' => 'Adherent logged successfully',
             'user' => $user,
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
             ]
-        ],200);
+        ], 200);
     }
 
     /**
@@ -94,7 +93,7 @@ class AdherentControlleur extends Controller
      * @OA\Post(
      *     path="/api/registerVisitor",
      *     tags={"Adherent"},
-     *     summary="Logs in a visitor",
+     *     summary="register in a visitor",
      *     @OA\RequestBody(
      *         required=true,
      *         description="Visitor's register",
@@ -129,7 +128,8 @@ class AdherentControlleur extends Controller
      *     )
      * )
      */
-    public function registerVisitor(AdherentRequest $request) {
+    public function registerVisitor(AdherentRequest $request)
+    {
         $request->validate([
             'login' => "required|string|between:5,50",
             'nom' => 'required|string|max:255',
@@ -145,23 +145,24 @@ class AdherentControlleur extends Controller
             'pseudo' => $request['pseudo'],
             'password' => Hash::make($request['password']),
             'valide' => 0,
-            'avatar'=>'storages/avatar/avatar.png',
+            'avatar' => 'storages/avatar/avatar.png',
         ]);
         try {
             $token = Auth::login($user);
+            $user->roles()->attach([4]);
             return response()->json([
                 'status' => 'success',
                 'message' => 'User created successfully',
                 'user' => $user,
                 'authorisation' => [
-                    'token'=> $token,
+                    'token' => $token,
                     'type' => 'bearer',
                 ]
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'message' => $e
-            ],422
+            ], 422
             );
         }
     }
@@ -197,33 +198,27 @@ class AdherentControlleur extends Controller
         ]);
     }
 
+
     /**
      * Display the specified resource.
      *
      * @OA\Post(
-     *     path="/api/adherent/{id}",
+     *     path="/api/{id}",
      *     tags={"Adherent"},
-     *     summary="Logs in a visitor",
+     *     summary="show profil",
      *     @OA\RequestBody(
      *         required=true,
-     *         description="show profil",
-     *         @OA\JsonContent(
-     *             required={"login","nom","email","prenom","pseudo","password"},
-     *             @OA\Property(property="email", type="string", format="email"),
-     *             @OA\Property(property="login", type="string"),
-     *             @OA\Property(property="nom", type="string"),
-     *             @OA\Property(property="prenom", type="string"),
-     *             @OA\Property(property="pseudo", type="string")
-     *             @OA\Property(property="password", type="string")
-     *         )
+     *         description="Show profil",
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful show profil",
+     *         description="Successful profil",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="user", type="object", description="The logged in user", ref="#/components/schemas/User"),
-     *             @OA\Property(property="authorisation", type="object"
+     *             @OA\Property(property="authorisation", type="object",
+     *                 @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."),
+     *                 @OA\Property(property="type", type="string", example="bearer")
      *             )
      *         )
      *     ),
@@ -237,15 +232,25 @@ class AdherentControlleur extends Controller
      *     )
      * )
      */
-    public function show(int $id): JsonResponse
+    public function show(Request $request, int $id)
     {
         try {
             $adherent = User::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'message' => "Profil successfully!",
-                'adherent' => $adherent
-            ], 200);
+            if (Gate::allows('role-adherent', $adherent)) {
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => "Profil successfully!",
+                        'adherent' => $adherent
+                    ], 200);
+                }
+            if(Gate::allows('role-admin', $adherent)){
+                $adherents = User::all();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => "Profil successfully!",
+                    'adherent' => $adherent
+                ], 200);
+            }
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -299,11 +304,20 @@ class AdherentControlleur extends Controller
         try {
             $adherent = User::findOrFail($id);
             $adherent->update($request->all());
-            return response()->json([
-                'status' => 'success',
-                'message' => "Adherent updated successfully!",
-                'adherent' => $adherent
-            ], 200);
+            if (Gate::allows('role-adherent', $adherent)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => "Adherent updated successfully!",
+                    'adherent' => $adherent
+                ], 200);
+            }
+            if (Gate::allows('role-admin', $adherent)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => "Adherent updated successfully!",
+                    'adherent' => $adherent
+                ], 200);
+            }
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -347,7 +361,7 @@ class AdherentControlleur extends Controller
      *     )
      * )
      */
-    public function updateAvatar(Request $request,int $id): JsonResponse
+    public function updateAvatar(Request $request,int $id)
     {
         try {
             $this->validate($request, [
@@ -356,11 +370,20 @@ class AdherentControlleur extends Controller
             $user = User::findOrFail($id);
             $user->avatar = $request->input('avatar');
             $user->save();
-            return response()->json([
-                'status' => 'success',
-                'message' => "Adherent avatar updated successfully!",
-                'url_media' => $user->avatar,
-            ], 200);
+            if (Gate::allows('role-admin', $user)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => "Adherent avatar updated successfully!",
+                    'url_media' => $user->avatar,
+                ], 200);
+            }
+            if (Gate::allows('role-adherent', $user)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => "Adherent avatar updated successfully!",
+                    'url_media' => $user->avatar,
+                ], 200);
+            }
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
