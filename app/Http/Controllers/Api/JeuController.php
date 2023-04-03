@@ -11,31 +11,86 @@ use App\Models\Commentaire;
 use App\Models\Jeu;
 use App\Models\Like;
 use Exception;
+use Faker\Generator;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Ramsey\Collection\Collection;
+use OpenApi\Annotations as OA;
 
 class JeuController extends Controller
 {
-    public function indexJeuVisiteur() {
-        $jeux = Jeu::all();
-        $lesJeux = [];
-        for ($i=0;$i<5;$i++) {
-            $lesJeux[$i] = $jeux[$i];
-        }
-        return JeuRessource::collection($lesJeux);
+    protected $faker;
+
+    public function __construct() {
+        $this->faker = $this->withFaker();
     }
 
+    protected function withFaker() {
+        return Container::getInstance()->make(Generator::class);
+    }
+
+    /**
+     * Show 5 random games in the database if you are a visitor
+     *
+     * @OA\Get(
+     *     path="/api/jeu/indexVisiteur",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Shows 5 random games"
+     *     )
+     * )
+     */
+    public function indexJeuVisiteur() {
+        $jeux = [];
+        $lesIdJeux = Jeu::pluck('id');
+        for($i=0;$i<5;$i++) {
+            $idRand = $this->faker->randomElement($lesIdJeux);
+            $jeux[$i] = Jeu::where('id', '=', $idRand)->get();
+            $lesIdJeux->forget($idRand);
+        }
+        return response()->json(['status' => 'success', 'message' => "Shows 5 random games", 'jeux' => $jeux], 200);
+    }
+
+    /**
+     * Show all games in the database if you are an adherent according to a minimum age or/and depending on the minimum number of players
+     *
+     * @OA\Get(
+     *     path="/api/jeu/indexAdherent",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Shows all the games"
+     *     )
+     * )
+     */
     public function indexJeuAdherent(Request $request) {
         $age_min = $request->input('age_min', -1);
-        $nb_joueur_min =  $request->input('nb_joueur_min', max(Jeu::pluck('nombre_joueurs_min')->toArray()));
+        $nb_joueur_min =  $request->input('nb_joueur_min', -1);
         $sort = $request->input('sort',"asc");
-        $jeux = Jeu::where('nombre_joueurs_min', '<=', $nb_joueur_min)->where('age_min', '>=', $age_min)->get();
+        $jeux = Jeu::where('nombre_joueurs_min', '>=', $nb_joueur_min)->where('age_min', '>=', $age_min)->get();
         if($sort=="desc")
-            return JeuRessource::collection($jeux->sortByDesc('nom'));
+            return response()->json(['status' => 'success', 'message' => "Shows all the games", 'jeux' => $jeux->sortByDesc('nom')], 200);
         else
-            return JeuRessource::collection($jeux->sortBy('nom'));
+            return response()->json(['status' => 'success', 'message' => "Shows all the games", 'jeux' => $jeux->sortBy('nom')], 200);
     }
 
+    /**
+     * Add a new game if you are at least a premium adherent
+     *
+     * @OA\Post(
+     *     path="/api/jeu/createJeu",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Game created successfully!"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error game create"
+     *     )
+     * )
+     */
     public function storeJeu(JeuRequest $request) {
         // Ici les données ont été validées dans la classe JeuRequest
         try {
@@ -59,6 +114,22 @@ class JeuController extends Controller
         }
     }
 
+    /**
+     * Update the game by his id if you are at least a premium adherent
+     *
+     * @OA\Put(
+     *     path="/api/jeu/updateJeu/id",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Game updated successfully!"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error game update"
+     *     )
+     * )
+     */
     public function updateJeu(JeuRequest $request, $id) {
         try {
             $jeu = Jeu::findOrFail($id);
@@ -69,6 +140,22 @@ class JeuController extends Controller
         }
     }
 
+    /**
+     * Update the game's URL by his id if you are at least a premium adherent
+     *
+     * @OA\Put(
+     *     path="/api/jeu/updateUrl/id",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Game url media updated successfully!"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error Game url media"
+     *     )
+     * )
+     */
     public function updateUrl(Request $request, $id) {
         try {
             $this->validate($request, [
@@ -83,6 +170,22 @@ class JeuController extends Controller
         }
     }
 
+    /**
+     * Add a purchase of a game if you are at least a premium adherent
+     *
+     * @OA\Post(
+     *     path="/api/jeu/createAchat",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Purchase created successfully!"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error purchase create"
+     *     )
+     * )
+     */
     public function storeAchat(AchatRequest $request) {
         // Ici les données ont été validées dans la classe JeuRequest
         try {
@@ -93,12 +196,24 @@ class JeuController extends Controller
             $achat->user_id = $request->user_id;
             $achat->jeu_id = $request->jeu_id;
             $achat->save();
-            return response()->json(['status' => "success", 'message' => "Game created successfully!", 'achat' => $achat]);
+            return response()->json(['status' => "success", 'message' => "Purchase created successfully!", 'achat' => $achat]);
         } catch (Exception $e) {
-            return response()->json(['status' => 'error', 'message' => "Error game create", 'error' => $e],422);
+            return response()->json(['status' => 'error', 'message' => "Error purchase create", 'error' => $e],422);
         }
     }
 
+    /**
+     * Show the details of game find by his id if you are an adherent
+     *
+     * @OA\Get(
+     *     path="/api/jeu/showJeu/id",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Full info of game"
+     *     )
+     * )
+     */
     public function showJeu($id) {
             $jeu = Jeu::findOrFail($id);
             $achat = Achat::all()->where('jeu_id', '=' ,$id);
