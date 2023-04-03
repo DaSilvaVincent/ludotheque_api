@@ -49,7 +49,7 @@ class AdherentControlleur extends Controller
      *             @OA\Property(property="authorisation", type="object",
      *                 @OA\Property(property="token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."),
      *                 @OA\Property(property="type", type="string", example="bearer")
-     *             )
+     *             ),
      *         )
      *     ),
      *     @OA\Response(
@@ -171,17 +171,27 @@ class AdherentControlleur extends Controller
      * A member's disconnection request.
      *
      * @OA\Post(
-     *     path="/api/logoutVisitor",
+     *     path="/api/LogoutVisitor",
      *     tags={"Adherent"},
      *     summary="logout in a visitor",
      *     @OA\RequestBody(
      *         required=true,
-     *         description="Visitor's logout"
+     *         description="Visitor's logout",
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Successful register";
+     *         description="Successful logout"
+     *         )
      *     ),
+     *     @OA\Response(
+     *         response=40,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="error"),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
      */
     public function logoutVisitor(): JsonResponse
     {
@@ -260,7 +270,7 @@ class AdherentControlleur extends Controller
      * @OA\Put(
      *     path="/api/adherent/{id}",
      *     tags={"Adherent"},
-     *     summary="Logs in a visitor",
+     *     summary="Update profil",
      *     @OA\RequestBody(
      *         required=true,
      *         description="Update profil",
@@ -270,7 +280,7 @@ class AdherentControlleur extends Controller
      *             @OA\Property(property="login", type="string"),
      *             @OA\Property(property="nom", type="string"),
      *             @OA\Property(property="prenom", type="string"),
-     *             @OA\Property(property="pseudo", type="string")
+     *             @OA\Property(property="pseudo", type="string"),
      *             @OA\Property(property="password", type="string")
      *         )
      *     ),
@@ -327,7 +337,7 @@ class AdherentControlleur extends Controller
      * @OA\Put(
      *     path="/api/adherent/{id}/avatar",
      *     tags={"Adherent"},
-     *     summary="Logs in a visitor",
+     *     summary="Update avatar",
      *     @OA\RequestBody(
      *         required=true,
      *         description="Update avatar",
