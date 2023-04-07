@@ -14,6 +14,7 @@ use Exception;
 use Faker\Generator;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Ramsey\Collection\Collection;
 use OpenApi\Annotations as OA;
 
@@ -203,6 +204,36 @@ class JeuController extends Controller
     }
 
     /**
+     * Delete a purchase of a game by his id if you are at least a premium adherent or the owner of the purchase
+     *
+     * @OA\Delete(
+     *     path="/api/jeu/deleteAchat",
+     *     tags={"Jeu"},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Purchase deleted successfully!"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error purchase delete"
+     *     )
+     * )
+     */
+    public function deleteAchat($id) {
+        try {
+            $achat = Achat::findOrFail($id);
+            if (Gate::allows('delete-achat',$achat)) {
+                $achat->delete();
+                return response()->json(['status' => "success", 'message' => "Purchase deleted successfully!"], 200);
+            }
+        }catch (Exception $e) {
+            error_log($e);
+            return response()->json(['status' => "error", 'message' => "Error purchase delete", "error" => $e], 422);
+        }
+    }
+
+
+    /**
      * Show the details of game find by his id if you are an adherent
      *
      * @OA\Get(
@@ -219,7 +250,6 @@ class JeuController extends Controller
             $achat = Achat::all()->where('jeu_id', '=' ,$id);
             $commentaire = Commentaire::all()->where('jeu_id', '=' ,$id);
             $like = Like::all()->where('jeu_id', '=', $id);
-            error_log($like);
             $nbLike = count($like);
             return response()->json(['status' => 'success', 'message' => "Full info of game", 'achats' => $achat, 'commentaires' => $commentaire, 'jeu' => $jeu, 'nb_likes' => $nbLike], 200);
     }

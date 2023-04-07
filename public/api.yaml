@@ -229,6 +229,17 @@ paths:
           description: 'Purchase created successfully!'
         '422':
           description: 'Error purchase create'
+  /api/jeu/deleteAchat:
+    delete:
+      tags:
+        - Jeu
+      summary: 'Delete a purchase of a game by his id if you are at least a premium adherent or the owner of the purchase'
+      operationId: 8158521432244c36bb447d44facbefda
+      responses:
+        '200':
+          description: 'Purchase deleted successfully!'
+        '422':
+          description: 'Error purchase delete'
   /api/jeu/showJeu/id:
     get:
       tags:

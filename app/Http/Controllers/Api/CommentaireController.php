@@ -8,6 +8,7 @@ use App\Models\Commentaire;
 use Exception;
 use http\Client\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 use OpenApi\Annotations as OA;
 
 class CommentaireController extends Controller
@@ -95,8 +96,9 @@ class CommentaireController extends Controller
             'required' => 'Le champ :attribute est obligatoire',
         ]);
         try {
-            $commentaire = Commentaire::find($id);
-            $commentaire->update($request->all());
+            $commentaire = Commentaire::findOrFail($id);
+            if (Gate::allows('edit-commentaire',$commentaire))
+                $commentaire->update($request->all());
         } catch (Exception $e) {
             return response()->json([
                 'message' => $e
@@ -134,8 +136,9 @@ class CommentaireController extends Controller
      */
     public function delete($id){
         try {
-            $commentaire = Commentaire::find($id);
-            $commentaire->delete();
+            $commentaire = Commentaire::findOrFail($id);
+            if (Gate::allows('delete-commentaire',$commentaire))
+                $commentaire->delete();
         } catch (Exception $e){
             return response()->json([
                 'message' => $e
