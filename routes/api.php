@@ -27,10 +27,10 @@ Route::prefix('commentaires')->group(function () {
         ->middleware(['auth', 'role:adherent'])
         ->name('commentaires.create');
     Route::put('/updateCommentaire/{id}', [CommentaireController::class, 'edit'])
-        ->middleware(['auth', 'role:commentaire-moderateur'])
+        //->middleware(['auth', 'role:commentaire-moderateur'])
         ->name('commentaires.update');
     Route::delete('/deleteCommentaire/{id}', [CommentaireController::class, 'delete'])
-        ->middleware(['auth', 'role:commentaire-moderateur'])
+        //->middleware(['auth', 'role:commentaire-moderateur'])
         ->name('commentaires.delete');
 });
 
@@ -53,6 +53,9 @@ Route::prefix('jeu')->group(function () {
     Route::get('/createAchat', [JeuController::class, 'storeAchat'])
         ->middleware(['auth', 'role:adherent-premium'])
         ->name('jeu.storeAchat');
+    Route::delete('/deleteAchat/{id}', [JeuController::class, 'deleteAchat'])
+        //->middleware(['auth', 'role:adherent-premium'])
+        ->name('jeu.deleteAchat');
     Route::get('/showJeu/{id}', [JeuController::class, 'showJeu'])
         ->middleware(['auth', 'role:adherent'])
         ->name('jeu.showJeu');
