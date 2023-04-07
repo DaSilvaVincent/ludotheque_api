@@ -1,0 +1,255 @@
+openapi: 3.0.0
+paths:
+  /api/loginVisitor:
+    post:
+      tags:
+        - Adherent
+      summary: 'Logs in a visitor'
+      description: "À visitor's connection request."
+      operationId: fad7ad7399b7d621b5eca795403beda4
+      requestBody:
+        description: "Visitor's email and password"
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'Successful login'
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string, example: success }
+                  user: { $ref: '#/components/schemas/User' }
+                  authorisation: { properties: { token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... }, type: { type: string, example: bearer } }, type: object }
+                type: object
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string, example: error }
+                  message: { type: string, example: Unauthorized }
+                type: object
+  /api/registerVisitor:
+    post:
+      tags:
+        - Adherent
+      summary: 'Logs in a visitor'
+      description: 'The request for registration.'
+      operationId: b1f737f531e830162dfb399b3242aa7f
+      requestBody:
+        description: "Visitor's register"
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - login
+                - nom
+                - email
+                - prenom
+                - pseudo
+              properties:
+                email:
+                  type: string
+                  format: email
+                login:
+                  type: string
+                nom:
+                  type: string
+                prenom:
+                  type: string
+                pseudo:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'Successful register'
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string, example: success }
+                  user: { $ref: '#/components/schemas/User' }
+                  authorisation: { properties: { token: { type: string, example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9... }, type: { type: string, example: bearer } }, type: object }
+                type: object
+        '422':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string, example: error }
+                  message: { type: string, example: Unauthorized }
+                type: object
+  '/api/adherent/{id}/avatar':
+    post:
+      tags:
+        - Adherent
+      summary: 'Logs in a visitor'
+      description: 'Update the avatar in storage.'
+      operationId: b57763c8a839e66bab28580313a481a7
+      requestBody:
+        description: 'Update avatar'
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - avatar
+              properties:
+                avatar:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'Successful update avatar'
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string, example: success }
+                  user: { $ref: '#/components/schemas/User' }
+                  authorisation: { type: object }
+                type: object
+        '422':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  status: { type: string, example: error }
+                  message: { type: string, example: Unauthorized }
+                type: object
+  /api/commentaires/createCommentaire:
+    post:
+      tags:
+        - Commentaires
+      summary: 'Add a comment to a game if you are an adherent'
+      operationId: 5c08e5c21bad24a03197ab7608aa268f
+      responses:
+        '200':
+          description: 'Comment created successfully'
+        '422':
+          description: 'Error in comment creation'
+  /api/commentaires/updateCommentaire/id:
+    put:
+      tags:
+        - Commentaires
+      summary: "Update the game's comment by his id if you are the owner of the comment or if you are a comment moderator"
+      operationId: ae139675bb8f0e093eba27e4805bf3bf
+      responses:
+        '200':
+          description: 'Comment updated successfully'
+        '422':
+          description: 'Error in comment update'
+  /api/commentaires/deleteCommentaire/id:
+    delete:
+      tags:
+        - Commentaires
+      summary: 'Delete the comment by his id if you are the owner of the comment or if you are a comment moderator'
+      operationId: 9d61ed1556e4414b66367140dba0139d
+      responses:
+        '200':
+          description: 'Comment successfully deleted'
+        '422':
+          description: 'Error in comment delete'
+  /api/jeu/indexVisiteur:
+    get:
+      tags:
+        - Jeu
+      summary: 'Show 5 random games in the database if you are a visitor'
+      operationId: 7fd3c7121148c4b6eb4081995527a485
+      responses:
+        '200':
+          description: 'Shows 5 random games'
+  /api/jeu/indexAdherent:
+    get:
+      tags:
+        - Jeu
+      summary: 'Show all games in the database if you are an adherent according to a minimum age or/and depending on the minimum number of players'
+      operationId: b3ba86884db0559898a4e8bd8442fd1a
+      responses:
+        '200':
+          description: 'Shows all the games'
+  /api/jeu/createJeu:
+    post:
+      tags:
+        - Jeu
+      summary: 'Add a new game if you are at least a premium adherent'
+      operationId: d3b1f03e3ca9695ff00a78f70ab7e504
+      responses:
+        '200':
+          description: 'Game created successfully!'
+        '422':
+          description: 'Error game create'
+  /api/jeu/updateJeu/id:
+    put:
+      tags:
+        - Jeu
+      summary: 'Update the game by his id if you are at least a premium adherent'
+      operationId: 070960c7e1525d46c1da13f003bd4fb3
+      responses:
+        '200':
+          description: 'Game updated successfully!'
+        '422':
+          description: 'Error game update'
+  /api/jeu/updateUrl/id:
+    put:
+      tags:
+        - Jeu
+      summary: "Update the game's URL by his id if you are at least a premium adherent"
+      operationId: adcab4cd0db90f9361ba2e8d26a06794
+      responses:
+        '200':
+          description: 'Game url media updated successfully!'
+        '422':
+          description: 'Error Game url media'
+  /api/jeu/createAchat:
+    post:
+      tags:
+        - Jeu
+      summary: 'Add a purchase of a game if you are at least a premium adherent'
+      operationId: 81157d1abb2b2299475020884a0e22d5
+      responses:
+        '200':
+          description: 'Purchase created successfully!'
+        '422':
+          description: 'Error purchase create'
+  /api/jeu/deleteAchat:
+    delete:
+      tags:
+        - Jeu
+      summary: 'Delete a purchase of a game by his id if you are at least a premium adherent or the owner of the purchase'
+      operationId: 8158521432244c36bb447d44facbefda
+      responses:
+        '200':
+          description: 'Purchase deleted successfully!'
+        '422':
+          description: 'Error purchase delete'
+  /api/jeu/showJeu/id:
+    get:
+      tags:
+        - Jeu
+      summary: 'Show the details of game find by his id if you are an adherent'
+      operationId: dd927bbf9adcedd6cb847450d73e97e5
+      responses:
+        '200':
+          description: 'Full info of game'
+tags:
+  -
+    name: Visitor
+    description: 'Visitor operations'
