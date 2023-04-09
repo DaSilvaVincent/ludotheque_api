@@ -149,7 +149,7 @@ class AdherentControlleur extends Controller
         ]);
         try {
             $token = Auth::login($user);
-            $user->roles()->attach([4]);
+            $user->roles()->attach([4,5]);
             return response()->json([
                 'status' => 'success',
                 'message' => 'User created successfully',
