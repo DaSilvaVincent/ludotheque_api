@@ -29,7 +29,7 @@ RUN composer install --optimize-autoloader --no-dev
 
 # Set the ownership and permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage
-RUN chmod -R 775 /var/www/html/storage
+RUN chmod -R 777 /var/www/html/storage
 
 # Expose port 80 for web server
 EXPOSE 80
