@@ -9,9 +9,11 @@ stages:
 
 # Définition de l'étape de test
 test:
-  stage: test
-  script:
-    - apt-get update && apt-get install -y unzip git
-    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --optimize-autoloader
-    - php artisan test
+    tags:
+      - gitlab-runner
+    stage: test
+    script:
+      - apt-get update && apt-get install -y unzip git
+      - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+      - composer install --prefer-dist --no-ansi --no-interaction --no-progress --optimize-autoloader
+      - php artisan test
