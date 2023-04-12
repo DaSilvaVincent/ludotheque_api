@@ -69,11 +69,10 @@ class JeuController extends Controller
         $age_min = $request->input('age_min', -1);
         $nb_joueur_min =  $request->input('nb_joueur_min', -1);
         $sort = $request->input('sort',"asc");
-        $jeux = Jeu::where('nombre_joueurs_min', '>=', $nb_joueur_min)->where('age_min', '>=', $age_min)->get();
-        if($sort=="desc")
-            return response()->json(['status' => 'success', 'message' => "Shows all the games", 'jeux' => $jeux->sortByDesc('nom')], 200);
-        else
-            return response()->json(['status' => 'success', 'message' => "Shows all the games", 'jeux' => $jeux->sortBy('nom')], 200);
+        $jeux = Jeu::where('nombre_joueurs_min', '>=', $nb_joueur_min)->where('age_min', '>=', $age_min);
+        $jeux = $jeux->orderBy('nom',$sort);
+        return response()->json(['status' => 'success', 'message' => "Shows all the games", 'jeux' => $jeux->get()], 200);
+
     }
 
     /**
