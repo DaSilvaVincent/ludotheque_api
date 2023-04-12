@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->string('pseudo');
-            $table->string('avatar');
+            $table->string('avatar')->default('images/no_image.png');
             $table->rememberToken();
             $table->timestamps();
         });

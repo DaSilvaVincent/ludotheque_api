@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'nom' => "vincent",
             'prenom' => "vinz",
             'pseudo' => "das",
-            'avatar' => "/ap/test",
+            'avatar' => "images/no_image.png",
             'remember_token' => Str::random(10),
         ]);
         User::factory()->create([
