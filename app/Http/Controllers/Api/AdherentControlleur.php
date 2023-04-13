@@ -145,7 +145,7 @@ class AdherentControlleur extends Controller
             'pseudo' => $request['pseudo'],
             'password' => Hash::make($request['password']),
             'valide' => 0,
-            'avatar' => 'storages/avatar/avatar.png',
+            'avatar' => 'images/no_image.png',
         ]);
         try {
             $token = Auth::login($user);

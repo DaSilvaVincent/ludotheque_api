@@ -162,7 +162,7 @@ class JeuController extends Controller
                 'url_media' => 'required',
             ]);
             $jeu = Jeu::findOrFail($id);
-            $jeu->url_media = $request->input('url_media');
+            $jeu->url_media = "images/".$request->input('url_media');
             $jeu->save();
             return response()->json(['status' => 'success', 'message' => "Game url media updated successfully!", 'url_media' => $jeu->url_media], 200);
         } catch (Exception $e) {
