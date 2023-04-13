@@ -33,8 +33,11 @@ testsUnit:
       name: "${URL_DOCKERHUB}/${USER_LOGIN}/${CI_PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}"
       entrypoint: [""]
     script:
+      - copy .env.example .env
+      - touch database/database.sqlite
       - composer install
       - php artisan key:generate
       - php artisan jwt:secret
+      - php artisan migrate:fresh --seed
       - php artisan test
     when: manual
