@@ -23,6 +23,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Copy application files to container
 COPY composer.json .
+COPY artisan .
 
 # Install application dependencies with Composer
 RUN composer install --optimize-autoloader
