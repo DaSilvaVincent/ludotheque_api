@@ -34,14 +34,14 @@ COPY .env.example .env
 
 RUN touch database/database.sqlite
 
+# Install application dependencies with Composer
+RUN composer install --optimize-autoloader
+
 RUN php artisan key:generate
 
 RUN php artisan jwt:secret
 
 RUN php artisan migrate:fresh --seed
-
-# Install application dependencies with Composer
-RUN composer install --optimize-autoloader
 
 # Set the ownership and permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage
