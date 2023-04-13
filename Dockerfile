@@ -1,10 +1,10 @@
-# Use an official PHP runtime as the base image
+# Utiliser une image PHP officielle en tant qu'image de base
 FROM php:8.1-fpm
 
-# Set the working directory in the container
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /var/www/html
 
-# Install dependencies
+# Installer les dépendances
 RUN apt-get update && apt-get install -y \
     curl \
     git \
@@ -17,40 +17,40 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     sqlite3
 
-# Install PHP extensions
+# Installer les extensions PHP
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install Composer
+# Installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy application files to container
+# Copier les fichiers de l'application dans le conteneur
 COPY . .
 
-# Copy .env files to container
+# Copier les fichiers .env dans le conteneur
 COPY .env.example .env
 
-# Create database.sqlite files to container
+# Créer le fichier database.sqlite dans le conteneur
 RUN touch database/database.sqlite
 
-# Install application dependencies with Composer
+# Installer les dépendances de l'application avec Composer
 RUN composer install --optimize-autoloader
 
-# Create key to container
+# Générer la clé de l'application
 RUN php artisan key:generate
 
-# Create key to container
+# Générer la clé JWT
 RUN php artisan jwt:secret
 
-# Initialize database.sqlite
+# Initialiser la base de données sqlite
 RUN php artisan migrate:fresh --seed
 
-# Set the ownership and permissions for Laravel
+# Définir les propriétaires et les permissions pour Laravel
 RUN chown -R www-data:www-data /var/www/html/storage
-RUN chmod -R 777 /var/www/html/storage
+RUN chmod -R 775 /var/www/html/storage
 RUN chmod 664 database/database.sqlite
 
-# Expose port 8000 for web server
+# Exposer le port 8000 pour le serveur web
 EXPOSE 8000
 
-# Run Laravel application
+# Exécuter l'application Laravel
 CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
