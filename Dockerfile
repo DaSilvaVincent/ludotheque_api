@@ -24,23 +24,30 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copy application files to container
-COPY composer.json .
-COPY artisan .
-
-# Copy application files to container
 COPY . .
 
+# Copy .env files to container
 COPY .env.example .env
 
-RUN touch /database/database.sqlite
+# Create database.sqlite files to container
+RUN touch database/database.sqlite
 
 # Install application dependencies with Composer
 RUN composer install --optimize-autoloader
 
+# Create key to container
+RUN php artisan key:generate
+
+# Create key to container
+RUN php artisan jwt:secret
+
+# Initialize database.sqlite
+RUN php artisan migrate:fresh --seed
+
 # Set the ownership and permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage
 RUN chmod -R 777 /var/www/html/storage
-RUN chmod 664 /database/database.sqlite
+RUN chmod 664 database/database.sqlite
 
 # Expose port 8000 for web server
 EXPOSE 8000
