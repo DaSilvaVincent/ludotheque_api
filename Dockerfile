@@ -34,12 +34,6 @@ COPY .env.example .env
 
 RUN touch /database/database.sqlite
 
-RUN php artisan key:generate
-
-RUN php artisan jwt:secret
-
-RUN php artisan migrate:fresh --seed
-
 # Install application dependencies with Composer
 RUN composer install --optimize-autoloader
 
