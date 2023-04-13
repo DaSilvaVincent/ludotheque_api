@@ -368,11 +368,14 @@ class AdherentControlleur extends Controller
     public function updateAvatar(Request $request,int $id)
     {
         try {
-            $this->validate($request, [
-                'avatar' => 'required',
-            ]);
+            print($request);
             $user = User::findOrFail($id);
-            $user->avatar = $request->input('avatar');
+            if ($request->hasFile('document') && $request->file('document')->isValid()) $file = $request->file('document');
+            $nom = 'image';
+            $now = time();
+            $nom = sprintf("%s_%d.%s", $nom, $now, $file->extension());
+            $file->storeAs('/images', $nom);
+            $user->avatar = 'images/'.$nom;
             $user->save();
             if (Gate::allows('role-admin', $user)) {
                 return response()->json([

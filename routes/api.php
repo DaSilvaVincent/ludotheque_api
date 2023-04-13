@@ -72,7 +72,7 @@ Route::prefix('adherent')->group(function () {
         ->name('adherent.show');
     Route::put('/{id}', [AdherentControlleur::class, 'updateProfile'])
         ->name('adherent.updateProfile');
-    Route::put('/{id}/avatar', [AdherentControlleur::class, 'updateAvatar'])
+    Route::post('/{id}/avatar', [AdherentControlleur::class, 'updateAvatar'])
         ->name('adherent.updateAvatar');
 });
 
