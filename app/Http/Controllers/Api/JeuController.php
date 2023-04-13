@@ -246,9 +246,9 @@ class JeuController extends Controller
      */
     public function showJeu($id) {
             $jeu = Jeu::findOrFail($id);
-            $achat = Achat::all()->where('jeu_id', '=' ,$id);
-            $commentaire = Commentaire::all()->where('jeu_id', '=' ,$id);
-            $like = Like::all()->where('jeu_id', '=', $id);
+            $achat = Achat::where('jeu_id', '=' ,$id)->get();
+            $commentaire = Commentaire::where('jeu_id', '=' ,$id)->get();
+            $like = Like::where('jeu_id', '=', $id)->get();
             $nbLike = count($like);
             return response()->json(['status' => 'success', 'message' => "Full info of game", 'achats' => $achat, 'commentaires' => $commentaire, 'jeu' => $jeu, 'nb_likes' => $nbLike], 200);
     }
