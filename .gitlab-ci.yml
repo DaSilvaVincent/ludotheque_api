@@ -34,4 +34,7 @@ testsUnit:
       entrypoint: [""]
     script:
       - composer install
+      - php artisan key:generate
+      - php artisan jwt:secret
       - php artisan test
+    when: manual
