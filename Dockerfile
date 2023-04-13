@@ -46,7 +46,7 @@ RUN php artisan migrate:fresh --seed
 # Set the ownership and permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage
 RUN chmod -R 777 /var/www/html/storage
-RUN chmod 664 /database/database.sqlite
+RUN chmod 664 database/database.sqlite
 
 # Expose port 8000 for web server
 EXPOSE 8000
