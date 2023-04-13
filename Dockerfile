@@ -32,7 +32,7 @@ COPY . .
 
 COPY .env.example .env
 
-RUN touch /database/database.sqlite
+RUN touch database/database.sqlite
 
 RUN php artisan key:generate
 
