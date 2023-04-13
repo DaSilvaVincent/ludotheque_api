@@ -36,7 +36,7 @@ Route::prefix('commentaires')->group(function () {
 
 Route::prefix('jeu')->group(function () {
     Route::get('/indexVisiteur', [JeuController::class, 'indexJeuVisiteur'])
-        ->middleware(['auth', 'role:visiteur'])
+        //->middleware(['auth', 'role:visiteur'])
         ->name('jeu.indexJeuVisiteur');
     Route::get('/indexAdherent', [JeuController::class, 'indexJeuAdherent'])
         ->middleware(['auth', 'role:adherent'])
