@@ -47,6 +47,7 @@ RUN php artisan migrate:fresh --seed
 RUN chown -R www-data:www-data /var/www/html/storage
 RUN chmod -R 777 /var/www/html/storage
 RUN chmod 664 database/database.sqlite
+RUN chmod 777 app/Http/Controllers/Api/JeuController
 
 # Expose port 8000 for web server
 EXPOSE 8000
