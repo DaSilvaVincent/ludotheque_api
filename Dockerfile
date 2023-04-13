@@ -25,11 +25,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY composer.json .
 COPY artisan .
 
-# Install application dependencies with Composer
-RUN composer install --optimize-autoloader
-
 # Copy application files to container
 COPY . .
+
+# Install application dependencies with Composer
+RUN composer install --optimize-autoloader
 
 # Set the ownership and permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage
