@@ -68,7 +68,7 @@ deploy:
     tags:
         - sae-s4a01
     script:
-        - CI_PROJECT_NAME=films
+        - CI_PROJECT_NAME=developpement_application_s4a01_p1
         - export NOMAD_ADDR=http://172.18.38.46:4646/
         - envsubst '${CI_PROJECT_NAME} ${CI_COMMIT_SHORT_SHA} ${NEXUS_USER} ${$NEXUS_PWD} ${URL_REGISTRE} ${IMAGE} ${URL_WEBSITE}' < project.nomad > job.nomad
         - nomad validate job.nomad
