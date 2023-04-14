@@ -41,3 +41,16 @@ testsUnit:
       - php artisan migrate:fresh --seed
       - php artisan test
     when: manual
+
+linting:
+    stage: linting
+    tags:
+      - sae-s4a01
+    image:
+      name: "${URL_DOCKERHUB}/${USER_LOGIN}/${CI_PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}"
+      entrypoint: [""]
+    script:
+      - cp .env.example .env
+      - composer install
+      - vendor/bin/phpcs
+    when: manual
