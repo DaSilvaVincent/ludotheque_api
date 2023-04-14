@@ -6,12 +6,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class CommentaireTest extends TestCase{
+class CommentaireTest extends TestCase
+{
 
     /**
      * A test for delete commentary.
      */
-    public function test_commentaire_delete(): void {
+    public function testCommentaireDelete(): void
+    {
         exec('php artisan migrate:fresh');
         exec('php artisan db:seed');
 

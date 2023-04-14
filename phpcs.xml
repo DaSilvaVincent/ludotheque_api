@@ -1,0 +1,9 @@
+<ruleset name="MonProjet">
+    <description>Configuration de linting pour MonProjet</description>
+    <file>tests/Feature/CommentaireTest.php</file>
+    <exclude-pattern>/storage/</exclude-pattern>
+    <arg name="extensions" value="php" />
+    <rule ref="PSR1" />
+    <rule ref="PSR2" />
+    <!-- Autres règles de linting ici -->
+</ruleset>
