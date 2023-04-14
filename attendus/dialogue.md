@@ -9,14 +9,3 @@
 ## Problemes
 #### On a eu du mal a trouve comment certaines requetes doivent etre traitees : par exemple la maniere dont l'adherent doit avoir acces a la suppression et modification de ses propres commentaires.
 #### Solution trouvee : gate
-
-
-# Client Angular
-
-## Travail collaboratif
-#### Vincent Da Silva a fait la mise en place de l'authentification
-#### Thomas Hanart
-#### Theo Journee
-#### Thimothee Lepetz
-
-## Problemes
