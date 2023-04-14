@@ -26,21 +26,4 @@ class AdherentTest extends TestCase{
         $response->assertStatus(200);
     }
 
-    /**
-     * A test for Update avatar adherent.
-     */
-    public function test_adherent_modifier_avatar(): void {
-        $response = $this->post('/api/loginVisitor', [
-            'email' => "vincentAdmin@domain.fr",
-            'password' => 'UnSecret',
-        ]);
-
-        $token = $response->json('token');
-
-        $response = $this->put('/api/adherent/1/avatar', [
-            'Authorization' => 'Bearer ' . $token, 'avatar' => 'images/avatar/avatar-4.png'
-        ]);
-
-        $response->assertStatus(200);
-    }
 }

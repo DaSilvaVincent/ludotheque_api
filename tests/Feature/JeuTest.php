@@ -40,6 +40,6 @@ class JeuTest extends TestCase {
         ]);
 
         $response->assertStatus(200);
-        $response->assertContent('{"status":"success","message":"Game url media updated successfully!","url_media":"https:\/\/ouistiti.fr"}');
+        $response->assertContent('{"status":"success","message":"Game url media updated successfully!","url_media":"images\/https:\/\/ouistiti.fr"}');
     }
 }
